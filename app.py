@@ -31,7 +31,7 @@ if submit:
 
     st.write("Your predicted tox scores are:")
     tox21_tasks3, tox21_datasets3, transformers3 = dc.molnet.load_tox21(featurizer=dc.feat.ConvMolFeaturizer())
-    model_reload = dc.models.GraphConvModel(len(tox21_tasks3), mode="classification", model_dir="./model")
+    model_reload = dc.models.GraphConvModel(len(tox21_tasks3), mode="classification", model_dir="model")
     model_reload.restore()
 
     smiles = [input_smile]
