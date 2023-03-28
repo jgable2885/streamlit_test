@@ -2,3 +2,4 @@ deepchem
 mmpdb
 dgl
 dgllife
+rdkit
