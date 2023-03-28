@@ -4,4 +4,3 @@ deepchem[jax]
 mmpdb
 dgl
 dgllife
-rdkit
