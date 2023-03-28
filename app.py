@@ -31,7 +31,7 @@ if submit:
 
     st.write("Your predicted tox scores are:")
     tox21_tasks3, tox21_datasets3, transformers3 = dc.molnet.load_tox21(featurizer=dc.feat.ConvMolFeaturizer())
-    model_reload = dc.models.GraphConvModel(len(tox21_tasks3), mode="classification", model_dir="/content/gdrive/MyDrive/models")
+    model_reload = dc.models.GraphConvModel(len(tox21_tasks3), mode="classification", model_dir="./model")
     model_reload.restore()
 
     smiles = [input_smile]
@@ -55,7 +55,7 @@ if submit:
     st.write("{} predictions suggest toxicity".format(input_tox_count))
     #st.table(pd.DataFrame(preds[0], columns=['Prob Tox','Prob False']))
 
-    ideas_df = generate_ideas(input_smile, database="/content/drive/MyDrive/AllHepG2.mmpdb")
+    ideas_df = generate_ideas(input_smile, database="AllHepG2.mmpdb")
     ideas_df.reset_index(inplace=True)
 
     featurized_ideas = featurizer3.featurize(ideas_df['SMILES'])
