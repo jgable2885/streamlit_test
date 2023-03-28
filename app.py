@@ -8,7 +8,7 @@ from itertools import islice
 from PIL import Image
 from rdkit.Chem.Draw import MolsToGridImage
 from mmpdb_ideas import generate_ideas
-from stqdm import stqdm
+#from stqdm import stqdm
 import numpy as np
 
 st.write('Hello, this is a Streamlit test')
