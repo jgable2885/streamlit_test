@@ -39,7 +39,7 @@ if submit:
     model_reload.restore()
 
     smiles = [input_smile]
-    featurizer3 = dc.feat.ConvMolFeaturizer()
+    featurizer3 = dc.feat.MolGraphConvFeaturizer(use_edges=True)
     new_smile3 = featurizer3.featurize(smiles)
 
     preds = model_reload.predict_on_batch(new_smile3, transformers=transformers3)
