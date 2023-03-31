@@ -51,7 +51,7 @@ if submit:
         return "Inconclusive"
     preds_df['tox_class'] = preds_df['Prob Tox'].apply(get_tox_class)
     st.table(preds_df.loc[:,['Assay','tox_class', 'Prob Tox']])
-    input_tox_count = np.sum(preds_df['Prob Tox'] > 0.7)
+    input_tox_count = np.sum(preds_df['Prob Tox'] > 0.6)
     st.write("{} predictions suggest toxicity".format(input_tox_count))
     #st.table(pd.DataFrame(preds[0], columns=['Prob Tox','Prob False']))
 
@@ -60,7 +60,7 @@ if submit:
 
     featurized_ideas = featurizer3.featurize(ideas_df['SMILES'])
     idea_preds = model_reload.predict_on_batch(featurized_ideas, transformers=transformers3)
-    toxicity_counts = [np.sum(pred>0.7) for pred in idea_preds[:,:,1]]
+    toxicity_counts = [np.sum(pred>0.6) for pred in idea_preds[:,:,1]]
     ideas_df['toxicity_counts'] = toxicity_counts
     ideas_df.sort_values(by=['toxicity_counts','sort_by'], ascending=[True,False], inplace=True)
 
