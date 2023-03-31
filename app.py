@@ -39,7 +39,7 @@ if submit:
     new_smile3 = featurizer3.featurize(smiles)
 
     preds = model_reload.predict_on_batch(new_smile3, transformers=transformers3)
-    preds_df = pd.DataFrame(preds[0], columns=['Prob Tox','Prob False'])
+    preds_df = pd.DataFrame(preds[0], columns=['Prob False','Prob Tox'])
     preds_df['Assay'] = tox21_tasks3
     #preds_df.set_index('Assay')
     def get_tox_class(prob_true):
@@ -60,7 +60,7 @@ if submit:
 
     featurized_ideas = featurizer3.featurize(ideas_df['SMILES'])
     idea_preds = model_reload.predict_on_batch(featurized_ideas, transformers=transformers3)
-    toxicity_counts = [np.sum(pred>0.7) for pred in idea_preds[:,:,0]]
+    toxicity_counts = [np.sum(pred>0.7) for pred in idea_preds[:,:,1]]
     ideas_df['toxicity_counts'] = toxicity_counts
     ideas_df.sort_values(by=['toxicity_counts','sort_by'], ascending=[True,False], inplace=True)
 
