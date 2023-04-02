@@ -100,7 +100,8 @@ if submit:
     	idea_hit_bonds.append(hit_bonds)
     grid_img = Draw.MolsToGridImage(idea_mols, legends=idea_legends[0:3], 
     								highlightAtomLists=idea_hit_atoms, 
-    								highlightBondLists=idea_hit_bonds)
+    								highlightBondLists=idea_hit_bonds,
+    								highlightColor=(1,1,0,0.4))
     grid_img.save("tmp_grid.png")
     st.image(Image.open("tmp_grid.png"), caption='Idea Structures')
     
