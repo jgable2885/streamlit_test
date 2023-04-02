@@ -11,6 +11,27 @@ from mmpdb_ideas import generate_ideas
 #from stqdm import stqdm
 import numpy as np
 
+from rdkit.Chem import MolFromSmarts
+def get_highlights(pattern, molecule):
+    ## adapted from https://www.rdkit.org/docs/GettingStartedInPython.html
+    if isinstance(molecule, str):
+        mol = MolFromSmiles(molecule)
+    elif isinstance(molecule, Chem.rdchem.Mol):
+        mol = molecule
+    else:
+        raise TypeError('molecule must be either a smiles string or rdkit.Chem.rdchem.Mol object')
+    if isinstance(pattern, str):
+        patt = MolFromSmarts(pattern)
+    else:
+        raise TypeError('pattern must be a SMARTS or SMILES string')
+    hit_ats = list(mol.GetSubstructMatch(patt))
+    hit_bonds = []
+    for bond in patt.GetBonds():
+        aid1 = hit_ats[bond.GetBeginAtomIdx()]
+        aid2 = hit_ats[bond.GetEndAtomIdx()]
+        hit_bonds.append(mol.GetBondBetweenAtoms(aid1, aid2).GetIdx())
+    return hit_ats, hit_bonds
+
 st.write('Hello, this is a Streamlit test')
 
 form = st.form(key='my-form')
@@ -69,7 +90,18 @@ if submit:
     ideas_df.sort_values(by=['toxicity_counts','sort_by'], ascending=[True,False], inplace=True)
 
     idea_mols = [Chem.MolFromSmiles(smi) for smi in ideas_df['SMILES'][0:3]]
+    idea_patts = [p for p in ideas_df['pCC50_to_smiles']]
     idea_legends = ["Predicted toxicities: {}".format(count) for count in ideas_df['toxicity_counts']]
-    grid_img = Draw.MolsToGridImage(idea_mols, legends=idea_legends[0:3])
+    idea_hit_atoms = []
+    idea_hit_bonds = []
+    for p,m in zip(idea_patts, idea_mols):
+    	hit_ats, hit_bonds = get_highlights(p,m)
+    	idea_hit_atoms.append(hit_ats)
+    	idea_hit_bonds.append(hit_bonds)
+    grid_img = Draw.MolsToGridImage(idea_mols, legends=idea_legends[0:3], 
+    								highlightAtomLists=idea_hit_atoms, 
+    								highlightBondLists=idea_hit_bonds)
     grid_img.save("tmp_grid.png")
     st.image(Image.open("tmp_grid.png"), caption='Idea Structures')
+    
+    
